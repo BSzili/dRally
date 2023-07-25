@@ -7,7 +7,12 @@
 	extern __POINTER__ RACE_BLOWI_BPK;
 	extern __POINTER__ BACKBUFFER;
 
+#ifdef __AMIGA__
+extern __DWORD__ INT8_FRAME_COUNTER;
+#define __GET_FRAME_COUNTER() (INT8_FRAME_COUNTER)
+#else
 __DWORD__ __GET_FRAME_COUNTER(void);
+#endif
 
 // SOMETHING WITH MINES ???
 void race___51ce0h(void){

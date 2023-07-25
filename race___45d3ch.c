@@ -130,7 +130,9 @@ void race___45d3ch(void){
 			memcpy(VGA13_ACTIVESCREEN+0x140*n, ___1a54d0h+0xc940+0x40*n-i, i);
 		}
 
+#ifndef __AMIGA__
 		__VGA13_PRESENTSCREEN__();
+#endif
 
 		D(___2432f8h) = (int)(170.0*dRMath_cos( LOCAL_PI*angle/180.0 ));
 		D(___243304h) = (int)(256.0/dRMath_sin( LOCAL_PI*angle/180.0 ));
@@ -166,7 +168,9 @@ void race___45d3ch(void){
 
 		if(angle > 90.0) angle = 90.0;
 		D(___243898h) = 0;
+#ifndef __AMIGA__
 		___58c60h();
+#endif
 	}
 
 	n = -1;
@@ -282,7 +286,9 @@ void race___46a10h(void){
 
 			D(___243898h) = 0;
 			D(___243874h) = D(___243898h);
+#ifndef __AMIGA__
 			___58c60h();
+#endif
 
 			F64(esp+0x50) = 150.0-(double)F32(esp+0x58);
 
@@ -482,7 +488,9 @@ void race___46a10h(void){
 			angle -= dangle;
 			if(angle < 1.0) angle = 1.0;
 			D(___243898h) = 0;
+#ifndef __AMIGA__
 			___58c60h();
+#endif
 		}
 	}
 

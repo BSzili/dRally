@@ -24,7 +24,12 @@
 	extern __POINTER__ RACE_BURN1A_BPK;
 
 void ___5e769h(__BYTE__ * A0, int Y3, int X3, int Y2, int X2, int Y1, int X1);
+#ifdef __AMIGA__
+extern __DWORD__ INT8_FRAME_COUNTER;
+#define __GET_FRAME_COUNTER() (INT8_FRAME_COUNTER)
+#else
 __DWORD__ __GET_FRAME_COUNTER(void);
+#endif
 
 #define LOC_PI 		3.14159265359
 #define LOC_5OVER6	0.833333

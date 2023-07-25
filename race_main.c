@@ -409,6 +409,12 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 					}
 				}
 
+#ifdef __AMIGA__0
+				static int nextHit = 0;
+				if (nextHit < frames)
+					nextHit = frames + 35;//rand_watcom106() & 0x1F;
+				else
+#endif
 				if(s_35e[MY_CAR_IDX].__14||s_35e[MY_CAR_IDX].__18||s_35e[MY_CAR_IDX].__1c){
 
 					D(___2438cch) = (int)(25000.0*sqrt((double)(s_35e[MY_CAR_IDX].__fc*s_35e[MY_CAR_IDX].__fc+s_35e[MY_CAR_IDX].__100*s_35e[MY_CAR_IDX].__100)));
@@ -433,7 +439,12 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 					}
 
 					D(___243d08h) = rand_watcom106()%0x6000;
-
+#ifdef __AMIGA__0
+					static int lastHitType = -1;
+					static int nextHitTime = 0;
+					if (s_35e[MY_CAR_IDX].__18e != lastHitType || nextHitTime < frames)
+					{
+#endif
 					switch(s_35e[MY_CAR_IDX].__18e){
 					case 0:
 						switch((int)getCounter(3)%3){
@@ -462,6 +473,11 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 					default:
 						break;
 					}
+#ifdef __AMIGA__0
+					lastHitType = s_35e[MY_CAR_IDX].__18e;
+					nextHitTime = frames + 70;
+					}
+#endif
 				}
 
 				if(((int)D(___2438d4h) > 0)&&(D(___196ddch) == 0)){
@@ -482,6 +498,14 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 					D(___196ddch) = 0;
 				}
 
+#ifdef __AMIGA__
+				static int holdTireSound = 0;
+				static int oldTireVolume = 0;
+				if (D(___2438d4h) != 0 && oldTireVolume == 0) {
+					holdTireSound = frames + 35;
+					oldTireVolume = D(___2438d4h);
+				}
+#endif
 				D(___2438d4h) = 0;
 
 				if(((int)s_94[MY_CAR_IDX].__18 <= 0)||(s_35e[MY_CAR_IDX].Finished != 0)){
@@ -495,6 +519,15 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 				dRally_Sound_adjustEffect(1, 0x10000, D(___196df8h), 0x8000);
 				race___54668h();	// POSITION, LAP COUNTER
 				race___55ae0h();	// POSITION, LAP COUNTER
+
+#ifdef __AMIGA__
+				if (holdTireSound > frames && D(___2438d4h) == 0 && oldTireVolume != 0) {
+					D(___2438d4h) = oldTireVolume;
+				}
+				else {
+					oldTireVolume = 0;
+				}
+#endif
 
 #if defined(DR_MULTIPLAYER)
 				if((___19bd60h == 0)||(D(___243318h) == 0)){
@@ -617,14 +650,29 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 		race___4ee9ch();
 		race___4f030h();
 
-		ecx = CURRENT_VIEWPORT_W+4;
-		ecx -= ecx&3;
+#ifdef __AMIGA__
+		__BYTE__* s = TRX_IMA + TRX_WIDTH * TRX_VIEWPORT_TL_Y + TRX_VIEWPORT_TL_X;
+		__BYTE__* d = BACKBUFFER + CURRENT_VIEWPORT_X + 0x60;
+		j = 0xc8;
+		n = TRX_WIDTH - CURRENT_VIEWPORT_W;
+		m = 0x200 - CURRENT_VIEWPORT_W;
+		int width = CURRENT_VIEWPORT_W / 4;
+		do {
+			memcpy(d, s, 0x140);
+			s += TRX_WIDTH;
+			d += 0x200;
+		} while (--j);
+#else
+		ecx = CURRENT_VIEWPORT_W + 4;
+		ecx -= ecx & 3;
+
 		m = -1;
 		while(++m < 0xc8){	// COPY TRACK BACKGROUND
 
 
 			memcpy(BACKBUFFER+0x200*m+CURRENT_VIEWPORT_X+0x60, TRX_IMA+TRX_WIDTH*(TRX_VIEWPORT_TL_Y+m)+TRX_VIEWPORT_TL_X, ecx);
 		}
+#endif
 
 #if defined(DR_MULTIPLAYER)
 		if(___19bd60h == 0){
@@ -673,13 +721,36 @@ void race_main(int MyIndex, int NumCars){		// my_position_index, number_of_racer
 			race___478c8h(0);
 			D(___243d14h) = 1;
 		}
-
+#ifndef __AMIGA__
 		/*
 		D(___243d08h) = __GET_FRAME_COUNTER();
 		while(D(___243d08h) == __GET_FRAME_COUNTER());
 		*/
 		while (frames == __GET_FRAME_COUNTER());
-
+#else
+		static unsigned int fps_time = 0;
+		static unsigned int fps = 0;
+		static int showFps = 0;
+		if (kmap[DR_SCAN_DELETE]) {
+			kmap[DR_SCAN_DELETE] = 0;
+			showFps = !showFps;
+		}
+		if (showFps) {
+			void ___424c8h_v2(const char *, int x, int y);
+			extern unsigned int __GET_TIMER_TICKS();
+			unsigned int current = __GET_TIMER_TICKS();
+			if (fps_time == 0 || fps_time >= current)
+			{
+				fps_time = 1000;
+			}
+			unsigned int newfps = 1000/(current-fps_time);
+			fps = (fps + newfps) / 2;
+			fps_time = current;
+			char buffer[32];
+			sprintf(buffer, "%2ld", fps);
+			___424c8h_v2(buffer, 0 + 0x60, 200 - 6);
+		}
+#endif
 		if((int)s_35e[MY_CAR_IDX].Drug > 0){
 
 			race___454ach();

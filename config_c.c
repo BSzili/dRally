@@ -358,8 +358,13 @@ static void CONFIG_DEFAULT(void){
     __DWORD__       eax, ebx, ecx, edx, esi, edi, ebp;
     __DWORD__       track, car, n;
 
+#ifdef __AMIGA__
+    ___24cc54h_sfx_volume = 0x10000;
+    ___24cc58h_msx_volume = 0xc000;
+#else
     ___24cc54h_sfx_volume = 0xc000;
     ___24cc58h_msx_volume = 0x8000;
+#endif
     ___1a1e50h_com_port_standard = STANDARD_COM1;
     ___199fa4h_com_port_addr = 0x3f8;
     ___199fa8h_com_port_irq = 4;

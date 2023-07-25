@@ -1,5 +1,8 @@
 #include "drally.h"
 #include "drally_structs_free.h"
+#ifdef __AMIGA__
+#include "drmath.h"
+#endif
 
 #pragma pack(1)
 typedef struct spectator_s {

@@ -60,7 +60,11 @@ ___35fbch:
 		L(ebx) = B(eax+___1a0ef8h);
 		B(ecx+esi+___1a0ef8h) = L(ebx);
 		ecx++;
+#ifdef __AMIGA__
+		L(ebx) = D(esp);
+#else
 		L(ebx) = B(esp);
+#endif
 		esi = edx;
 		B(eax+___1a0ef8h) = L(ebx);
 ___35fe9h:

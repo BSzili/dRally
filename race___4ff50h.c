@@ -35,6 +35,13 @@ typedef struct spectator_s {
 #endif // DR_MULTIPLAYER
 	extern spectator_t ___1df720h[];
 
+#ifdef __AMIGA__
+extern __DWORD__ INT8_FRAME_COUNTER;
+#define __GET_FRAME_COUNTER() (INT8_FRAME_COUNTER)
+#else
+__DWORD__ __GET_FRAME_COUNTER(void);
+#endif
+
 #define LOC_83 0.833333
 #define LOC_PI 3.14159265359
 
@@ -74,6 +81,11 @@ void race___4ff50h(void){
 	D(___2432b8h) = D(esp+0xe8)+s_35e[D(___243c60h)].__4-0x4;
 	D(___2432bch) = D(esp+0xe4)+s_35e[D(___243c60h)].__8-0x4;
 
+#ifdef __AMIGA__
+	static __DWORD__ nextEnemyShot = 0;
+	static __DWORD__ nextPlayerShot = 0;
+	__DWORD__ frames = __GET_FRAME_COUNTER();
+#endif
 	if(D(___243c60h) != D(MY_CAR_IDX)){
 
 		eax = (int)(s_35e[D(___243c60h)].XLocation-s_35e[D(MY_CAR_IDX)].XLocation);
@@ -82,12 +94,26 @@ void race___4ff50h(void){
 
 		if((int)ecx > 0x1000){
 			
+#ifdef __AMIGA__
+			if (nextEnemyShot < frames) {
+#endif
 			dRally_Sound_pushEffect(10, 19+rand_watcom106()%2, 0, ecx, 0x21000, 0x8000);
+#ifdef __AMIGA__
+			nextEnemyShot = frames + 5;
+			}
+#endif
 		}
 	}
 	else {
 
+#ifdef __AMIGA__
+		if (nextPlayerShot < frames) {
+#endif
 		dRally_Sound_pushEffect(9, 19+rand_watcom106()%2, 0, 0x9000, 0x21000, 0x8000);
+#ifdef __AMIGA__
+		nextPlayerShot = frames + 5;
+		}
+#endif
 	}
 
 	D(esp+0xd4) = helper00(256.0*dRMath_sin(((double)s_35e[D(___243c60h)].Direction+180.0)*LOC_PI/180.0))-3+rand_watcom106()%6;

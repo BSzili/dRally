@@ -58,6 +58,57 @@ static void helper1(int A0, int LoY_XZ, int LoY, int HiY_XZ, int HiY, int * A5){
 	}
 }
 
+#ifdef __AMIGA__
+static void helper_order_y_noz(int * X1, int * Y1, int * X2, int * Y2, int * X3, int * Y3){
+
+    int     i, j, args[9];
+
+	args[1] = *Y3;
+	args[2] = *X3;
+	args[4] = *Y2;
+	args[5] = *X2;
+    args[7] = *Y1;
+    args[8] = *X1;
+
+    i = (*Y1 < *Y2) ? !(*Y2 < *Y3) : 2*!(*Y1 < *Y3);
+    j = (*Y1 < *Y2) ? 2*(*Y1 < *Y3) : (*Y2 < *Y3);
+
+   *X1 = args[3*j+2];
+   *Y1 = args[3*j+1];
+   *X2 = args[3*(3-(i+j))+2];
+   *Y2 = args[3*(3-(i+j))+1];
+   *X3 = args[3*i+2];
+   *Y3 = args[3*i+1];
+}
+
+static void helper_order_y(int * X1, int * Y1, int * Z1, int * X2, int * Y2, int * Z2, int * X3, int * Y3, int * Z3){
+
+    int     i, j, args[9];
+
+	args[0] = *Z3;
+	args[1] = *Y3;
+	args[2] = *X3;
+	args[3] = *Z2;
+	args[4] = *Y2;
+	args[5] = *X2;
+    args[6] = *Z1;
+    args[7] = *Y1;
+    args[8] = *X1;
+
+    i = (*Y1 < *Y2) ? !(*Y2 < *Y3) : 2*!(*Y1 < *Y3);
+    j = (*Y1 < *Y2) ? 2*(*Y1 < *Y3) : (*Y2 < *Y3);
+
+   *X1 = args[3*j+2];
+   *Y1 = args[3*j+1];
+   *Z1 = args[3*j];
+   *X2 = args[3*(3-(i+j))+2];
+   *Y2 = args[3*(3-(i+j))+1];
+   *Z2 = args[3*(3-(i+j))];
+   *X3 = args[3*i+2];
+   *Y3 = args[3*i+1];
+   *Z3 = args[3*i];
+}
+#else
 static void helper_order_y(int * X1, int * Y1, int * Z1, int * X2, int * Y2, int * Z2, int * X3, int * Y3, int * Z3){
 
     int     i, j, args[9];
@@ -85,6 +136,7 @@ static void helper_order_y(int * X1, int * Y1, int * Z1, int * X2, int * Y2, int
    *Y3 = args[3*i+1];
    if(Z3) *Z3 = args[3*i];
 }
+#endif
 
 // Trees
 void ___5e3e8h(int Z3, int Y3, int X3, int Z2, int Y2, int X2, int Z1, int Y1, int X1){
@@ -137,7 +189,11 @@ void ___5e137h(__BYTE__ A0, int Y3, int X3, int Y2, int X2, int Y1, int X1){
 
     int     OBJ_XL, OBJ_XR;
 
+#ifdef __AMIGA__
+    helper_order_y_noz(&X1, &Y1, &X2, &Y2, &X3, &Y3);
+#else
     helper_order_y(&X1, &Y1, NULL, &X2, &Y2, NULL, &X3, &Y3, NULL);
+#endif
 
     helper1(0, X1, Y1, X2, Y2, ___5a86ch);
     helper1(0, X2, Y2, X3, Y3, ___5a86ch);
@@ -173,7 +229,11 @@ void ___5e769h(__BYTE__ * A0, int Y3, int X3, int Y2, int X2, int Y1, int X1){
     int     SHD_XL, SHD_XR;
 //    int     * LEFT, * RIGHT;
 
+#ifdef __AMIGA__
+    helper_order_y_noz(&X1, &Y1, &X2, &Y2, &X3, &Y3);
+#else
     helper_order_y(&X1, &Y1, NULL, &X2, &Y2, NULL, &X3, &Y3, NULL);
+#endif
 
     helper1(0, X1, Y1, X2, Y2, ___5a86ch);
 	helper1(0, X2, Y2, X3, Y3, ___5a86ch);

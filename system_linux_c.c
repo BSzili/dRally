@@ -111,7 +111,7 @@ void _dos_gettime(struct dostime_t * __time){
 }
 
 unsigned int __GET_TIMER_TICKS(void){
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__AMIGA__)
     return SDL_GetTicks();
 #else
 	time_t 		tmt;
@@ -133,7 +133,7 @@ void dRally_System_init(void){
 		SDL_Log("Failed to init video subsystem: %s", SDL_GetError());
 	}
 
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__AMIGA__)
     time(&tmt);
     localtime_r(&tmt, &TimeInit);
 #endif

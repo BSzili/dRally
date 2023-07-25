@@ -129,13 +129,13 @@ static const __DWORD__ DROP_CHEAT	= 0x19181320;
 
 static __DWORD__ checkCheat(__BYTE__ * p){
 
-	if(DRAW_CHEAT == D(p+6)) return CHEAT_DRAW;
-	if(DROP_CHEAT == D(p+6)) return CHEAT_DROP;
+	if(DRAW_CHEAT == SDL_SwapLE32(D(p+6))) return CHEAT_DRAW;
+	if(DROP_CHEAT == SDL_SwapLE32(D(p+6))) return CHEAT_DROP;
 
-	if(W(p+5) == 0x1320){
+	if(SDL_SwapLE16(W(p+5)) == 0x1320){
 
-		if(DROOL_CHEAT == D(p+6)) return CHEAT_DROOL;
-		if(DRIVE_CHEAT == D(p+6)) return CHEAT_DRIVE;
+		if(DROOL_CHEAT == SDL_SwapLE32(D(p+6))) return CHEAT_DROOL;
+		if(DRIVE_CHEAT == SDL_SwapLE32(D(p+6))) return CHEAT_DRIVE;
 	}
 
 	return CHEAT_NONE;

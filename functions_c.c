@@ -33,10 +33,14 @@ __DWORD__ MULSHIFT(__DWORD__ d0, __DWORD__ d1){
 
 	__DWORD__ 	rslt, q_rslt;
 
+#ifndef __AMIGA__
 	q_rslt = ((__QWORD__)d0*(__QWORD__)d1)>>0x10; 
+#endif
 	rslt = (d0>>0x10)*d1 + (d0&0xffff)*(d1>>0x10) + (((d0&0xffff)*(d1&0xffff))>>0x10);
 
+#ifndef __AMIGA__
 	if(q_rslt != rslt) printf("MULSHIFT doesn't match\n");
+#endif
 
 	return rslt;
 }

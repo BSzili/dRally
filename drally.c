@@ -28,8 +28,17 @@ static void ___100dch(void){
 	exit(0x70);
 }
 
+#ifdef __AMIGA__
+int _argc;
+char** _argv;
+#endif
+
 int main(int argc, char * argv[]){
 
+#ifdef __AMIGA__
+	_argc = argc;
+	_argv = argv;
+#endif
 	dRally_System_init();
 #if defined(DR_LETTERBOX)
 	dRally_Display_init(W_LETTERBOX);

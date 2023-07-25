@@ -10,7 +10,12 @@
 	extern __POINTER__ BACKBUFFER;
 	extern int CURRENT_VIEWPORT_X;
 
+#ifdef __AMIGA__
+extern __DWORD__ INT8_FRAME_COUNTER;
+#define __GET_FRAME_COUNTER() (INT8_FRAME_COUNTER)
+#else
 __DWORD__ __GET_FRAME_COUNTER(void);
+#endif
 
 static double local_op(double dval){
 

@@ -100,11 +100,32 @@ double create_double(int LSB, int, int, int, int, int, int, int MSB);
 #include "types.h"
 
 
+#ifdef __AMIGA__
+	extern __BYTE__ ___243ca4h[];
+	extern __BYTE__ SUPERGLOBAL___243898h[];
+	extern __BYTE__ SUPERGLOBAL___243894h[];
+	extern __BYTE__ ___243ca8h[];
+	extern __BYTE__ ___243874h[];
+	extern __BYTE__ ___2438d0h[];
+
+static inline __BYTE__ *findCounter(int n) {
+	__BYTE__ *counters[] = {NULL, ___243ca4h, SUPERGLOBAL___243898h, SUPERGLOBAL___243894h, ___243ca8h, ___243874h, ___2438d0h};
+	return counters[n];
+}
+
+static inline void incCounter(int n) { D(findCounter(n))++; }
+static inline void decCounter(int n) { D(findCounter(n))--; }
+static inline __DWORD__ getCounter(int n) {return D(findCounter(n)); }
+static inline void resetCounter(int n)  { D(findCounter(n)) = 0; }
+static inline void setCounter(int n, __DWORD__ val) { D(findCounter(n)) = val; }
+
+#else
 void incCounter(int n);
 void decCounter(int n);
 __DWORD__ getCounter(int n);
 void resetCounter(int n);
 void setCounter(int n, __DWORD__ val);
+#endif
 
 
 #define read_b(p)       (*(__BYTE__*)(p))

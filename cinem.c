@@ -121,9 +121,11 @@ static void ___108e8h(void){
 	}
 
 	df_bits = EncodedFrame[read_p++];
+#ifndef __AMIGA__
 	___1a1f18h = ___3f71ch__allocateMemory(0x1001*sizeof(__BYTE__));
 	___1a1f14h = ___3f71ch__allocateMemory(0x1001*sizeof(__BYTE__));
 	___1a1f24h = (__DWORD__ *)___3f71ch__allocateMemory(0x1001*sizeof(__DWORD__));
+#endif
 	___1a1f2ch = df_bits+1;
 	___1a1f04h = 2<<df_bits;
 	___1a1f08h = (1<<df_bits)+2;
@@ -185,9 +187,11 @@ static void ___108e8h(void){
 		}
 	}
 
+#ifndef __AMIGA__
 	dRMemory_free(___1a1f18h);
 	dRMemory_free(___1a1f14h);
 	dRMemory_free((__POINTER__)___1a1f24h);
+#endif
 }
 
 void ___10b80h_cdecl(
@@ -215,6 +219,11 @@ void ___10b80h_cdecl(
 	strcat(strcpy(buffer, ___1a0d60h), a_haf_file);
 	DecodedFrame = ___3f71ch__allocateMemory(0xfa00);	// 320x200
 	EncodedFrame = ___3f71ch__allocateMemory(0xfa00);	// 320x200
+#ifdef __AMIGA__
+	___1a1f18h = ___3f71ch__allocateMemory(0x1001*sizeof(__BYTE__));
+	___1a1f14h = ___3f71ch__allocateMemory(0x1001*sizeof(__BYTE__));
+	___1a1f24h = (__DWORD__ *)___3f71ch__allocateMemory(0x1001*sizeof(__DWORD__));
+#endif
 
 	if(a_msx_fmt) dRally_Sound_load(a_msx_fmt, a_msx_file, a_sfx_fmt, a_sfx_file, 6);
 
@@ -305,4 +314,9 @@ void ___10b80h_cdecl(
 	dRMemory_free(EncodedFrame);
 	dRMemory_free(___1a1f10h);
 	dRMemory_free(___1a1f1ch);
+#ifdef __AMIGA__
+	dRMemory_free(___1a1f18h);
+	dRMemory_free(___1a1f14h);
+	dRMemory_free((__POINTER__)___1a1f24h);
+#endif
 }

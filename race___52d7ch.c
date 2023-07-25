@@ -25,7 +25,12 @@ typedef struct spectator_s {
 	extern __POINTER__ BACKBUFFER;
 	extern __POINTER__ RACE_SPLATX_BPK[2];
 
+#ifdef __AMIGA__
+extern __DWORD__ INT8_FRAME_COUNTER;
+#define __GET_FRAME_COUNTER() (INT8_FRAME_COUNTER)
+#else
 __DWORD__ __GET_FRAME_COUNTER(void);
+#endif
 
 void race___52d7ch(void){
 
