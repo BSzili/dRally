@@ -30,9 +30,13 @@ extern unsigned char VGA13_ACTIVESCREEN_2[];
 extern unsigned char VESA101_ACTIVESCREEN[];
 extern int iStartX, iEndX, iStartY, iEndY;
 
+extern int _argc;
+extern char** _argv;
+
 //unsigned int Ticks = 0;
 //unsigned int VRetraceTicks = 0;
 unsigned long __stack = (100*1024);
+char __stdiowin[]="CON:////Death Rally/CLOSE/WAIT";
 
 void IO_Loop(void);
 void __VGA13_PRESENTSCREEN__(void);
@@ -309,8 +313,6 @@ void dRally_Display_init(int mode){
 
 	char *exename;
 	struct DiskObject *appicon;
-	extern int _argc;
-	extern char** _argv;
 
 	if (_argc == 0) {
 		struct WBStartup *startup = (struct WBStartup *)_argv;

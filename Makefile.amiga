@@ -1,5 +1,5 @@
 CC := m68k-amigaos-gcc -noixemul
-AS := vasmm68k_mot -I/opt/amiga/m68k-amigaos/ndk-include -Faout -m68020 # -DDEBUG=1
+AS := vasmm68k_mot -I/opt/amiga/m68k-amigaos/ndk-include -I/opt/amiga/m68k-amigaos/include -Faout -m68020 # -DDEBUG=1
 STRIP := m68k-amigaos-strip
 
 CPU ?= 060

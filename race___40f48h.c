@@ -503,6 +503,9 @@ void race___40f48h(void){
 
 // MY CAR DAMAGE PREVIEW
     if((n = (int)dRMath_ceil((double)(int)D(___1de580h+0x94*D(MY_CAR_IDX)+0x18)/20480.0)) < 0) n = 0;
+#ifdef __AMIGA__
+    if (n > 5) n = 5;
+#endif
     
     s = ___1d5890h + 0x540 * (5 - n);
     d = BACKBUFFER + 0x200 *  50 + CURRENT_VIEWPORT_X + 0x20;
