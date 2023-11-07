@@ -238,7 +238,11 @@ void __PRESENTSCREEN__(void){
 					c2p_write_bm(GX.width, GX.height, 0, 0, GX.chunky, sbuf[currentBitMap]->sb_BitMap);
 				} else if (CyberGfxBase) {
 					temprp.BitMap = sbuf[currentBitMap]->sb_BitMap;
-					WritePixelArray(GX.chunky, 0, 0, GX.width, &temprp, 0, 0, GX.width, GX.height, RECTFMT_LUT8);
+					if (screen->Width >= 640 && screen->Height >= 400) {
+						ScalePixelArray(GX.chunky, GX.width, GX.height, GX.width, &temprp, 0, 0, GX.width*2, GX.height*2, RECTFMT_LUT8);
+					} else {
+						WritePixelArray(GX.chunky, 0, 0, GX.width, &temprp, 0, 0, GX.width, GX.height, RECTFMT_LUT8);
+					}
 				} /*else if (use_wcp) {
 					WriteChunkyPixels(window->RPort, 0, 0, GX.width - 1, GX.height - 1, GX.chunky, GX.width);
 				} else {
@@ -463,6 +467,15 @@ static int setvideomode(int x, int y, int c, int fs)
 				CYBRBIDTG_NominalWidth, x,
 				CYBRBIDTG_NominalHeight, y,
 				TAG_DONE);
+
+			if (modeID == (ULONG)INVALID_ID && x == 320 && y == 200) {
+				// some cards like the Voodoo 3 lack a 320x200 mode
+				modeID = BestCModeIDTags(
+					CYBRBIDTG_Depth, 8,
+					CYBRBIDTG_NominalWidth, 320,
+					CYBRBIDTG_NominalHeight, 240,
+					TAG_DONE);
+			}
 		}
 
 		int ntscHack = 0;
