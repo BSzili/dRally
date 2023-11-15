@@ -112,10 +112,17 @@ void menu_main(void){
 	}
 	else {
 
+#if defined(__AMIGA__) && !defined(DR_GAMEPAD)
+		strcpy(___1866b8h+0x60e, "Gamepad/Joystick Enabled");
+#else
 		strcpy(___1866b8h+0x60e, "Gamepad/Joystick Disabled");
+#endif
 		B(___185b58h+3*9+3) = 0;
 	}
 
+#if defined(__AMIGA__) && !defined(DR_MULTIPLAYER)
+	B(___185b58h+3*0+1) = 0; // disable the multiplayer menu
+#endif
 	if(___196a90h_modem_dialing == 0) strcpy(___1866b8h+0xd7a, "Pulse Dialing");  
 
 	srand_watcom106(__GET_TIMER_TICKS());

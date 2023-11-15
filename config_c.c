@@ -56,6 +56,9 @@ extern __BYTE__ ___199f3fh[];
 extern __BYTE__ ___199f43h[];
 extern __BYTE__ ___199f44h[];
 extern __BYTE__ ___199f45h[];
+#ifdef __AMIGA__
+extern __BYTE__ ___199f40h[];
+#endif
 
 static __BYTE__ ROL_BYTE(__BYTE__ b, int n){
 
@@ -388,6 +391,15 @@ static void CONFIG_DEFAULT(void){
         }
     }
 
+#ifdef __AMIGA__
+    ___1a1110h_gp_steer_left = B(___199f3eh);	// LEFT
+    ___1a1130h_gp_steer_right = B(___199f3fh);	// RIGHT
+    ___1a113ch_gp_brake = B(___199f41h);		// DOWN
+    ___1a1164h_gp_accelerate = B(___199f40h);	// UP
+    ___1a1120h_gp_turbo_boost = B(___199f43h);	// BUTTON 2
+    ___1a1118h_gp_machine_gun = B(___199f42h);	// BUTTON 1
+    ___1a111ch_gp_drop_mine = B(___199f44h);	// BUTTON 3
+#else
     ___1a1110h_gp_steer_left = B(___199f3eh);
     ___1a1130h_gp_steer_right = B(___199f3fh);
     ___1a113ch_gp_brake = B(___199f41h);
@@ -395,6 +407,7 @@ static void CONFIG_DEFAULT(void){
     ___1a1120h_gp_turbo_boost = B(___199f43h);
     ___1a1118h_gp_machine_gun = B(___199f44h);
     ___1a111ch_gp_drop_mine = B(___199f45h);
+#endif
     ___1a1140h.turbo_boost = DR_SCAN_LSHIFT;
     ___1a1140h.horn = DR_SCAN_SPACE;
     ___1a1140h.steer_left = DR_SCAN_LEFT;
