@@ -66,7 +66,8 @@ static int safetochange = FALSE;
 static int safetowrite = FALSE;
 static ULONG fsMonitorID = INVALID_ID;
 //static ULONG fsModeID = INVALID_ID;
-static int fsForce640;
+static int fsForce640 = FALSE;
+static int rtg320x240 = FALSE;
 struct Library *CyberGfxBase = NULL;
 static char wndPubScreen[32] = {"Workbench"};
 static UWORD *pointermem;
@@ -327,7 +328,7 @@ void dRally_Display_init(int mode){
 
 	if ((appicon = GetDiskObject((STRPTR)exename))) {
 		char *value;
-// UBYTE * __stdargs FindToolType( CONST STRPTR *toolTypeArray, CONST STRPTR typeName );
+
 		if ((value = (char *)FindToolType((CONST_STRPTR *)appicon->do_ToolTypes, (CONST_STRPTR)"FORCEMODE"))) {
 			if (!strcmp(value, "NTSC"))
 				fsMonitorID = NTSC_MONITOR_ID;
@@ -348,6 +349,9 @@ void dRally_Display_init(int mode){
 		}
 		if (FindToolType((CONST_STRPTR *)appicon->do_ToolTypes, (CONST_STRPTR)"FORCE640") != NULL) {
 			fsForce640 = TRUE;
+		}
+		if (FindToolType((CONST STRPTR *)appicon->do_ToolTypes, (CONST STRPTR)"RTG320X240") != NULL) {
+			rtg320x240 = TRUE;
 		}
 
 		FreeDiskObject(appicon);
@@ -462,11 +466,13 @@ static int setvideomode(int x, int y, int c, int fs)
 		if (fsMonitorID != (ULONG)INVALID_ID) {
 			//printf("Using forced monitor: %08x\n", fsMonitorID);
 		} else if (CyberGfxBase) {
-			modeID = BestCModeIDTags(
-				CYBRBIDTG_Depth, 8,
-				CYBRBIDTG_NominalWidth, x,
-				CYBRBIDTG_NominalHeight, y,
-				TAG_DONE);
+			if (!(rtg320x240 && x == 320 && y == 200)) {
+				modeID = BestCModeIDTags(
+					CYBRBIDTG_Depth, 8,
+					CYBRBIDTG_NominalWidth, x,
+					CYBRBIDTG_NominalHeight, y,
+					TAG_DONE);
+			}
 
 			if (modeID == (ULONG)INVALID_ID && x == 320 && y == 200) {
 				// some cards like the Voodoo 3 lack a 320x200 mode
